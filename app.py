@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
@@ -33,7 +33,6 @@ class Delivery:
         self.status = status
 
 
-
 customer = None
 order = Order()
 history = []
@@ -46,11 +45,9 @@ menu = [
 ]
 
 
-
 @app.route("/")
 def home():
-    return render_template("index.html",message="Food Delivery App Running")
-
+    return render_template("index.html")
 
 
 @app.route("/create", methods=["POST"])
@@ -60,7 +57,6 @@ def create_account():
 
     customer = Customer(data["id"], data["name"], data["password"])
     return jsonify({"message": "Account Created!"})
-
 
 
 @app.route("/login", methods=["POST"])
@@ -77,19 +73,16 @@ def login():
     return jsonify({"message": "Login Successful!"})
 
 
-
 @app.route("/menu", methods=["GET"])
 def get_menu():
-    menu_list = []
-    for f in menu:
-        menu_list.append({
+    return jsonify([
+        {
             "name": f.name,
             "category": f.category,
             "price": f.price,
             "available": f.available
-        })
-    return jsonify(menu_list)
-
+        } for f in menu
+    ])
 
 
 @app.route("/add", methods=["POST"])
@@ -110,14 +103,14 @@ def add_food():
     return jsonify({"error": "Item not found"})
 
 
-
 @app.route("/finish", methods=["GET"])
 def finish_order():
     global order
 
     response = {
         "total": order.total,
-        "items": order.items
+        "items": order.items,
+        "history": history
     }
 
     if order.total > 5000:
@@ -128,10 +121,8 @@ def finish_order():
     delivery = Delivery("Dispatched")
     response["delivery_status"] = delivery.status
 
-    response["history"] = history
-
     return jsonify(response)
 
 
-
-app.run(host="0.0.0.0", port=5001)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001)
