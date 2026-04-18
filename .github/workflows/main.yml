@@ -1,23 +1,31 @@
-name: cloudchasers-pipeline
-on: workflow_dispatch
+name: DevOps CI
+
+on:
+  push:
+    branches: ["main"]
 
 jobs:
-  build-jobs:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v6
-        with:
-          ref: main
 
-      - name: get pem file
-        run: |
-          echo "${{secrets.Vanishri}}" > shri-7.key.pem
-          chmod 400 shri-7.key.pem
-          ls -lrsth
-      - name: cp app.py
-        run: scp -o StrictHostKeyChecking=no -i shri-7.key.pem app.py ec2-user@13.232.188.239:/home/ec2-user/
-      - name: cp req.txt
-        run: scp -o StrictHostKeyChecking=no -i shri-7.key.pem requirements.txt ec2-user@13.232.188.239:/home/ec2-user/ 
-      - name: run app
-        run: ssh -o StrictHostKeyChecking=no -i shri-7.key.pem ec2-user@13.232.188.239 "cd /home/ec2-user && python3 -m venv venv && source venv/bin/activate && pip3 install -r requirements.txt && python3 app.py"
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Start Flask App
+      run: |
+        nohup python app.py > output.log 2>&1 &
+        sleep 5
+
+    - name: Test API
+      run: |
+        curl --fail http://127.0.0.1:5001/ || exit 1
