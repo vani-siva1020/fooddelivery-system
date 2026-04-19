@@ -18,7 +18,7 @@
 
 <script>
 
-// Load menu
+
 fetch("http://54.87.139.42:5010/menu")
 .then(res => res.json())
 .then(data => {
@@ -29,11 +29,11 @@ fetch("http://54.87.139.42:5010/menu")
     document.getElementById("menu").innerHTML = list;
 })
 .catch(err => {
-    document.getElementById("menu").innerHTML = "Menu load error ❌";
+    document.getElementById("menu").innerHTML = "Menu load error ";
     console.log(err);
 });
 
-// Add order
+
 function order() {
     let item = document.getElementById("item").value;
 
@@ -49,7 +49,7 @@ function order() {
         document.getElementById("msg").innerText = data.message || data.error;
     })
     .catch(err => {
-        document.getElementById("msg").innerText = "Error placing order ❌";
+        document.getElementById("msg").innerText = "Error placing order ";
         console.log(err);
     });
 }
