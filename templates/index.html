@@ -18,7 +18,7 @@
 
 <script>
 
-fetch("/menu")
+fetch("http://54.87.139.42:5010/menu")
 .then(res => res.json())
 .then(data => {
     let list = "";
@@ -32,7 +32,7 @@ fetch("/menu")
 function order() {
     let item = document.getElementById("item").value;
 
-    fetch("/add", {
+    fetch("http://54.87.139.42:5010/add", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({item: item})
