@@ -2,23 +2,97 @@
 <html>
 <head>
     <title>Food Delivery App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff5722;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f1f1f1;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e64a19;
+        }
+
+        #msg {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Food Delivery App 🚀</h1>
+<div class="container">
 
-<h2>Menu</h2>
-<ul id="menu"></ul>
+    <h1>Food Delivery App 🚀</h1>
 
-<h2>Order</h2>
-<input type="text" id="item" placeholder="Enter item name">
-<button onclick="order()">Order</button>
+    <h2>Menu</h2>
+    <ul id="menu"></ul>
 
-<p id="msg"></p>
+    <h2>Order</h2>
+    <input type="text" id="item" placeholder="Enter item name">
+    <button onclick="order()">Order</button>
+
+    <p id="msg"></p>
+
+</div>
 
 <script>
 
-
+// Load menu
 fetch("/menu")
 .then(res => res.json())
 .then(data => {
@@ -29,11 +103,11 @@ fetch("/menu")
     document.getElementById("menu").innerHTML = list;
 })
 .catch(err => {
-    document.getElementById("menu").innerHTML = "Menu load error ";
+    document.getElementById("menu").innerHTML = "Menu load error ❌";
     console.log(err);
 });
 
-
+// Order food
 function order() {
     let item = document.getElementById("item").value;
 
@@ -49,7 +123,7 @@ function order() {
         document.getElementById("msg").innerText = data.message || data.error;
     })
     .catch(err => {
-        document.getElementById("msg").innerText = "Error placing order ";
+        document.getElementById("msg").innerText = "Error placing order ❌";
         console.log(err);
     });
 }
